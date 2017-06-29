@@ -1,7 +1,5 @@
 function [] = PlayCenterMovie(centerMovie, varargin)
 % Just like PlaySideMovies, but just plays one movie in the middle! Yay.
-% You really should use absoulte filepaths, but we'll try to help you if
-% you gave one in the current directory. 
 %
 % A number of parameters are possible.  To use them, you need to specify
 % their names, like this: 
@@ -28,18 +26,21 @@ p.parse(centerMovie, varargin{:});
 inputs = p.Results;
 
 %Check if we got an absolute path, otherwise assume it's in the folder of
-%the main experiment. (This works on macs but sure is hacky!)
-if inputs.centerMovie(1) == '/'
-    fullpathMovie = inputs.centerMovie;
-else
-    fullpathMovie = strcat(EXPFOLDER, '/', inputs.centerMovie);
+%the main experiment. 
+
+inputs.centerMovie = strcat(EXPFOLDER, '/', inputs.centerMovie);
+
+gotSound = 1;
+
+if inputs.soundclip==0
+    gotSound = 0;
 end
 
 %Ensure no keys are being pressed - solves the 'trigger finger problem'
 while KbCheck; end % Wait until all keys are released.
 
 %Prepare the SOUND 
-if inputs.soundclip
+if gotSound
     [y, freq, nbits] = wavread(input.soundclip);
     wavedata = y';
     nrchannels = size(wavedata,1);
@@ -51,7 +52,8 @@ if inputs.soundclip
 end
 
 %Prepare & start the MOVIES
-movie = Screen('OpenMovie', EXPWIN, fullpathMovie);
+inputs.centerMovie
+movie = Screen('OpenMovie', EXPWIN, inputs.centerMovie);
 Screen('PlayMovie', movie, 1, inputs.shouldloop, inputs.ownsound);
 
 while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
