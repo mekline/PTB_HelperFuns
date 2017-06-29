@@ -1,23 +1,31 @@
-function WINDOW_PARAMS = SetSpaceParameters(Calib)
+function [WINDOW_PARAMS, KEYID] = SetSpaceParameters(Calib)
 %Sets all the default parameters for a looking time experiment. 
 %The types of parameters in this file are things that should never ever
 %need to change, like where to put two movies if playing them side by side.
 %It takes as input a Calib object which has some basics about screen size
 %created during PTB initialization
 
-global EXPWIN WINDOW_PARAMS; 
+global EXPWIN; 
 
-%Keyboard stuff
+WINDOW_PARAMS.X = Calib.screen.x;
+WINDOW_PARAMS.WIDTH = Calib.screen.width;
+WINDOW_PARAMS.Y = Calib.screen.y;
+WINDOW_PARAMS.HEIGHT = Calib.screen.height;
+WINDOW_PARAMS.WHOLESCREEN = [WINDOW_PARAMS.X, WINDOW_PARAMS.Y, WINDOW_PARAMS.WIDTH, WINDOW_PARAMS.HEIGHT];
+
+%Keyboard/text stuff
 KbName('UnifyKeyNames');
-WINDOW_PARAMS.KEYBOARD=max(GetKeyboardIndices);
-WINDOW_PARAMS.SPACE=KbName('SPACE');
-WINDOW_PARAMS.Y = KbName('y');
-WINDOW_PARAMS.N = KbName('n');
-WINDOW_PARAMS.Z = KbName('z'); %Values MK uses for R and L
-WINDOW_PARAMS.C = KbName('c');
+KEYID.KEYBOARD=max(GetKeyboardIndices);
+KEYID.SPACE=KbName('SPACE');
+KEYID.Y = KbName('y');
+KEYID.N = KbName('n');
+KEYID.Z = KbName('z'); %Values MK uses for R and L
+KEYID.C = KbName('c');
 
 Screen('TextSize', EXPWIN, 14);
 
+WINDOW_PARAMS.TEXTX = Calib.screen.width*(5/12);
+WINDOW_PARAMS.TEXTY = Calib.screen.height/2;
 %%%%%%%%%%%
 % Set video rectangle parameters
 % Note: this is all relativized to monitor size

@@ -1,9 +1,8 @@
-function [] = Setup_PTool()
-% Just encapsulates all the boilerplate that has to come at the
-% beginning of any Psychtoolbox script.  All initialization,
-% window size setting, color resolution and so on should happen right here
-
-global parameters
+function [] = Setup_Help_PTool()
+% Just encapsulates all the boilerplate that often comes at
+% beginning of any Psychtoolbox script.  
+% In the current version this is all handled in SetCalib, but just in
+% case...
 
 %%%%%%%%%%%
 % Opening boilerplate

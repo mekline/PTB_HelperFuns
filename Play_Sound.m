@@ -4,8 +4,6 @@ function [] = Play_Sound(soundclip, toBlock);
 %the soundfile is finished, or if it should go ahead with whatever comes
 %next while the noise is playing in the background.
 
-global parameters
-
 try
     % Read WAV file from filesystem:
     [y, freq] = audioread(soundclip);
@@ -22,15 +20,13 @@ try
     % Start audio playback
     t1 = PsychPortAudio('Start', pahandle, 1, 0, 1);
 
-    %Wait until the end!  How dumb!  
-    %WaitSecs(length) %What a hack!
 
    
     if toBlock
         PsychPortAudio('Stop', pahandle, 1);  % Stop playback, but wait until the sound has finished playing!!
         % Close the audio device:
         PsychPortAudio('Close', pahandle);
-    else
+    else %just go on
     end
 
 
