@@ -19,6 +19,8 @@ function [] = PlaySideMovies(leftMovie, rightMovie, varargin)
 % ownsound: Set to 1 to turn on the sounds in the movie file - often we want these silent!
 % shouldloop: Set to 1 to make the movie loop (until you press a key to stop it)
 
+global EXPFOLDER EXPWIN WINDOW_PARAMS;
+
 p = inputParser;
 p.addRequired('leftMovie', @isstr);
 p.addRequired('rightMovie', @isstr);
@@ -31,37 +33,39 @@ p.addParamValue('shouldloop', 0, @(x) true);
 p.parse(leftMovie, rightMovie, varargin{:});
 inputs = p.Results;
 
-global parameters;
-
+%Check if we got an absolute path (or any movie at all), otherwise assume it's in the folder of
+%the main experiment. (This works on macs but sure is hacky!)
 gotLeft = 1;
-gotRight = 1;
-gotSound = 1;
-
-if strcmp(inputs.leftMovie,'')
+if strcmp(inputs.leftMovie, '')
+    fullpathleftMovie = '';
     gotLeft = 0;
+else
+    if inputs.leftMovie(1) == '/'
+        fullpathleftMovie = inputs.leftMovie;
+    else
+        fullpathleftMovie = strcat(EXPFOLDER, '/', inputs.leftMovie);
+    end
 end
-if strcmp(inputs.rightMovie,'')
+
+gotRight = 1;
+if strcmp(inputs.rightMovie, '')
+    fullpathrightMovie = '';
     gotRight = 0;
-end
-if inputs.soundclip==0
-    gotSound = 0;
-end
-
-%Make absolute filepaths!
-currDir = pwd;
-if gotLeft
-    inputs.leftMovie = strcat(currDir, '/', inputs.leftMovie);
-end
-if gotRight
-    inputs.rightMovie = strcat(currDir, '/', inputs.rightMovie);
+else
+    if inputs.rightMovie(1) == '/'
+        fullpathrightMovie = inputs.rightMovie;
+    else
+        fullpathrightMovie = strcat(EXPFOLDER, '/', inputs.rightMovie);
+    end
 end
 
+fullpathleftMovie
+fullpathrightMovie
 %Ensure no keys are being pressed - solves the 'trigger finger problem'
 while KbCheck; end % Wait until all keys are released.
 
-
 %Prepare the SOUND 
-if gotSound
+if inputs.soundclip
     [y, freq, nbits] = wavread(inputs.soundclip);
     wavedata = y';
     nrchannels = size(wavedata,1);
@@ -74,11 +78,11 @@ end
 
 %Prepare & start the MOVIES
 if gotLeft
-    [movie_L movieduration_L fps imgw imgh] = Screen('OpenMovie', parameters.scr.winPtr, inputs.leftMovie);
+    movie_L = Screen('OpenMovie', EXPWIN, fullpathleftMovie);
     Screen('PlayMovie', movie_L, 1, inputs.shouldloop, inputs.ownsound);
 end
 if gotRight
-    [movie_R movieduration_R fps imgw imgh] = Screen('OpenMovie', parameters.scr.winPtr, inputs.rightMovie);
+    movie_R = Screen('OpenMovie', EXPWIN, fullpathrightMovie);
     Screen('PlayMovie', movie_R, 1, inputs.shouldloop, inputs.ownsound);
 end
 
@@ -89,10 +93,10 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     tex_R=0;
     
     if gotLeft
-        tex_L = Screen('GetMovieImage', parameters.scr.winPtr, movie_L, 1);
+        tex_L = Screen('GetMovieImage', EXPWIN, movie_L, 1);
     end
     if gotRight
-        tex_R = Screen('GetMovieImage', parameters.scr.winPtr, movie_R, 1);
+        tex_R = Screen('GetMovieImage', EXPWIN, movie_R, 1);
     end
 
     if (tex_L<=0 & tex_R<=0) %Movies are over, break!
@@ -101,7 +105,7 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     
     if tex_L>0
         % Draw the new texture immediately to screen:
-        Screen('DrawTexture', parameters.scr.winPtr, tex_L, [],parameters.leftbox);
+        Screen('DrawTexture', EXPWIN, tex_L, [],WINDOW_PARAMS.LEFTBOX);
         % Release texture:
         Screen('Close', tex_L);
     end;
@@ -109,18 +113,18 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     % Valid 2nd texture returned?
     if tex_R>0
         % Draw the new texture immediately to screen:
-        Screen('DrawTexture', parameters.scr.winPtr, tex_R, [], parameters.rightbox);
+        Screen('DrawTexture', EXPWIN, tex_R, [], WINDOW_PARAMS.RIGHTBOX);
         % Release texture:
         Screen('Close', tex_R);
     end;
     
     %And add the captions!
-    DrawFormattedText(parameters.scr.winPtr, inputs.caption_left, parameters.leftbox(1), parameters.leftbox(4));
-    DrawFormattedText(parameters.scr.winPtr, inputs.caption_right, parameters.rightbox(1), parameters.rightbox(4));
+    DrawFormattedText(EXPWIN, inputs.caption_left, WINDOW_PARAMS.LEFTBOX(1), WINDOW_PARAMS.LEFTBOX(4) + 20);
+    DrawFormattedText(EXPWIN, inputs.caption_right, WINDOW_PARAMS.RIGHTBOX(1), WINDOW_PARAMS.RIGHTBOX(4) + 20);
 
     % Update display if there is anything to update:
     if (tex_L>0 | tex_R>0)
-        vbl=Screen('Flip', parameters.scr.winPtr,0,1); %clearmode | so we keep the final still up
+        vbl=Screen('Flip', EXPWIN,0,1); %clearmode | so we keep the final still up
     else
         continue
     end;
@@ -139,7 +143,7 @@ if gotRight
 end
 
 % Close the SOUND
-if gotSound
+if inputs.soundclip
     PsychPortAudio('Stop', pahandle);
     PsychPortAudio('Close', pahandle);
 end

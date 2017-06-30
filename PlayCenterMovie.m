@@ -15,7 +15,7 @@ function [] = PlayCenterMovie(centerMovie, varargin)
 % ownsound: Set to 1 to turn on the sounds in the movie file - often we want these silent!
 % shouldloop: Set to 1 to make the movie loop (until you press a key to stop it)
 
-global EXPFOLDER EXPWIN CENTER;
+global EXPFOLDER EXPWIN WINDOW_PARAMS;
 
 p = inputParser;
 p.addRequired('centerMovie', @isstr);
@@ -34,6 +34,8 @@ if inputs.centerMovie(1) == '/'
 else
     fullpathMovie = strcat(EXPFOLDER, '/', inputs.centerMovie);
 end
+
+fullpathMovie
 
 %Ensure no keys are being pressed - solves the 'trigger finger problem'
 while KbCheck; end % Wait until all keys are released.
@@ -64,12 +66,12 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     
     if tex>0
         % Draw the new texture immediately to screen:
-        Screen('DrawTexture', EXPWIN, tex, [],[CENTER(1)-200, CENTER(2)-150, CENTER(1)+200, CENTER(2) + 150]);
+        Screen('DrawTexture', EXPWIN, tex, [],WINDOW_PARAMS.CENTERBOX);
         % Release texture:
         Screen('Close', tex);
         
         %And draw the caption too!  Center it below the movie
-        DrawFormattedText(EXPWIN, inputs.caption, CENTER(1)-200, CENTER(2)+150);
+        DrawFormattedText(EXPWIN, inputs.caption, WINDOW_PARAMS.CENTERBOX(1), WINDOW_PARAMS.CENTERBOX(4)+20);
 
     end;
 
@@ -88,7 +90,7 @@ Screen('PlayMovie', movie, 0);
 Screen('CloseMovie', movie);
 
 % Close the SOUND
-if gotSound
+if inputs.soundclip
     PsychPortAudio('Stop', pahandle);
     PsychPortAudio('Close', pahandle);
 end

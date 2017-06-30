@@ -24,6 +24,8 @@ KEYID.C = KbName('c');
 
 Screen('TextSize', EXPWIN, 14);
 
+%(A standard spot to put text in the middle of the screen)
+
 WINDOW_PARAMS.TEXTX = Calib.screen.width*(5/12);
 WINDOW_PARAMS.TEXTY = Calib.screen.height/2;
 %%%%%%%%%%%
@@ -49,7 +51,7 @@ centercorner = (Calib.screen.width/2)-(moviewidth/2);
 
 WINDOW_PARAMS.LEFTBOX = [leftcorner,topheight,leftcorner+moviewidth,topheight+movieheight];
 WINDOW_PARAMS.RIGHTBOX = [rightcorner,topheight,rightcorner+moviewidth,topheight+movieheight];
-WINDOW_PARAMS.RIGHTBOX = [centercorner, topheight, centercorner+moviewidth, topheight + movieheight];
+WINDOW_PARAMS.CENTERBOX = [centercorner, topheight, centercorner+moviewidth, topheight + movieheight];
 
 end
 
