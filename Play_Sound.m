@@ -4,6 +4,8 @@ function [] = Play_Sound(soundclip, toBlock);
 %the soundfile is finished, or if it should go ahead with whatever comes
 %next while the noise is playing in the background.
 
+soundclip
+
 try
     % Read WAV file from filesystem:
     [y, freq] = audioread(soundclip);

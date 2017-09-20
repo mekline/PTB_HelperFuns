@@ -6,14 +6,14 @@ function [datafilepointer] = AssignDataFile()
 
 global EXPERIMENT SUBJECT DATAFOLDER
 
-datafilename = strcat(DATAFOLDER,'/',  EXPERIMENT, '_', SUBJECT,'.dat') % name of data file to write to
+datafilename = strcat(DATAFOLDER,'/data_',  EXPERIMENT, '_', SUBJECT,'.dat'); % name of data file to write to
 
 % check for existing result file to prevent accidentally overwriting
 % files from a previous subject/session (except for subject numbers > 99):
 if fopen(datafilename, 'rt')~=-1
     %fclose('all');
-    error('Result data file already exists! Choose a different subject ID.');
     Closeout_PTool;
+    error('Result data file already exists! Choose a different subject ID.');   
 else
     datafilepointer = fopen(datafilename,'wt'); % open ASCII file for writing
 end
