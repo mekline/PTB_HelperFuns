@@ -30,6 +30,7 @@ p.addParamValue('caption_left', '', @isstr);
 p.addParamValue('caption_right', '', @isstr);
 p.addParamValue('ownsound', 0, @(x) true);
 p.addParamValue('shouldloop', 0, @(x) true);
+p.addParamValue('border', 0, @(x) true);
 
 p.parse(leftMovie, rightMovie, varargin{:});
 inputs = p.Results;
@@ -110,7 +111,7 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     end;
 
     % Valid 2nd texture returned?
-    if tex_R>0
+    if tex_R>0 
         % Draw the new texture immediately to screen:
         Screen('DrawTexture', EXPWIN, tex_R, [], WINDOW_PARAMS.RIGHTBOX);
         % Release texture:
@@ -119,8 +120,12 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     
     % Draw borders if applicable
     if inputs.border
-        Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.LEFTBOX, 5);
-        Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.RIGHTBOX, 5);
+        if tex_L>0
+            Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.LEFTBOX, 5);
+        end
+        if tex_R>0
+            Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.RIGHTBOX, 5);
+        end
     end
         
     %And add the captions!
