@@ -18,6 +18,7 @@ function [] = PlaySideMovies(leftMovie, rightMovie, varargin)
 % caption_Left, caption_Right: Caption to show at the bottom of the movie
 % ownsound: Set to 1 to turn on the sounds in the movie file - often we want these silent!
 % shouldloop: Set to 1 to make the movie loop (until you press a key to stop it)
+% border: Set to 1 to put a TEXTCOLOR border around videos
 
 global EXPFOLDER EXPWIN WINDOW_PARAMS;
 
@@ -59,8 +60,6 @@ else
     end
 end
 
-fullpathleftMovie
-fullpathrightMovie
 %Ensure no keys are being pressed - solves the 'trigger finger problem'
 while KbCheck; end % Wait until all keys are released.
 
@@ -118,6 +117,12 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
         Screen('Close', tex_R);
     end;
     
+    % Draw borders if applicable
+    if inputs.border
+        Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.LEFTBOX, 5);
+        Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.RIGHTBOX, 5);
+    end
+        
     %And add the captions!
     DrawFormattedText(EXPWIN, inputs.caption_left, WINDOW_PARAMS.LEFTBOX(1), WINDOW_PARAMS.LEFTBOX(4) + 20);
     DrawFormattedText(EXPWIN, inputs.caption_right, WINDOW_PARAMS.RIGHTBOX(1), WINDOW_PARAMS.RIGHTBOX(4) + 20);

@@ -65,16 +65,14 @@ while ~KbCheck %1 %loops until we finish the movie or get a keypress to escape
     end
     
     if tex>0
-
+        % Draw border if applicable
+        if inputs.border
+            Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR [,color] [,rect] [,penWidth]);
+        end
         % Draw the new texture immediately to screen:
         Screen('DrawTexture', EXPWIN, tex, [],WINDOW_PARAMS.CENTERBOX);
         % Release texture:
         Screen('Close', tex);
-        
-        % Draw border if applicable
-        if inputs.border
-            Screen('FrameRect', EXPWIN, WINDOW_PARAMS.TEXTCOLOR, WINDOW_PARAMS.CENTERBOX ,5);
-        end
         
         %And draw the caption too!  Center it below the movie
         DrawFormattedText(EXPWIN, inputs.caption, WINDOW_PARAMS.CENTERBOX(1), WINDOW_PARAMS.CENTERBOX(4)+20);
