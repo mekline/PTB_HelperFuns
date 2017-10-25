@@ -4,7 +4,7 @@ function [] = Show_Blank()
 
 global EXPWIN WINDOW_PARAMS
 
-Screen('FillRect', EXPWIN, WINDOW_PARAMS.BLACK);
+Screen('FillRect', EXPWIN, WINDOW_PARAMS.BGCOLOR);
 vbl=Screen('Flip', EXPWIN);
 
 

@@ -11,7 +11,7 @@ DefaultStyle = Screen('TextStyle', EXPWIN);
 %Check for additional parameters!
 p = inputParser;
 p.addRequired('message', @isstr);
-p.addParamValue('color', WINDOW_PARAMS.WHITE, @(x) true);
+p.addParamValue('color', WINDOW_PARAMS.TEXTCOLOR, @(x) true);
 p.addParamValue('start_x', floor(WINDOW_PARAMS.TEXTX), @(x) true);
 p.addParamValue('start_y', floor(WINDOW_PARAMS.TEXTY), @(x) true);
 p.addParamValue('bounding_characters', 60, @(x) true);
@@ -29,7 +29,7 @@ Screen('TextSize',EXPWIN, inputs.size);
 Screen('TextStyle', EXPWIN, inputs.style);
 
 % Clear screen to background color
-Screen('FillRect', EXPWIN, WINDOW_PARAMS.BLACK);
+Screen('FillRect', EXPWIN, WINDOW_PARAMS.BGCOLOR);
 % ...and flip it up. Initial display and sync to timestamp:
 vbl=Screen('Flip', EXPWIN);
 

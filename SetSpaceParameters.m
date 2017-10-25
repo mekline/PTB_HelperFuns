@@ -38,6 +38,8 @@ WINDOW_PARAMS.CENTER = [round((Calib.screen.width - Calib.screen.x)/2) ...
 WINDOW_PARAMS.BLACK = BlackIndex(EXPWIN); 
 WINDOW_PARAMS.WHITE = WhiteIndex(EXPWIN);
 WINDOW_PARAMS.GRAY = GrayIndex(EXPWIN);
+WINDOW_PARAMS.BGCOLOR = WINDOW_PARAMS.GRAY; %Overwrite this in your script to set a new background!
+WINDOW_PARAMS.TEXTCOLOR = WINDOW_PARAMS.BLACK; %Overwrite this in your script to set a new background!
 
 %Calculate locations of videos!
 border = 30;
