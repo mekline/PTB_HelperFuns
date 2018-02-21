@@ -1,10 +1,11 @@
-function [] = Play_Sound(soundclip, toBlock);
+function [] = Play_Sound(soundclip, toBlock)
 %This plays a sound clip without any accompanying video or pix.
 %toBlock tells you if you will force the script to block (wait) until
 %the soundfile is finished, or if it should go ahead with whatever comes
 %next while the noise is playing in the background.
 
 soundclip
+
 
 try
     % Read WAV file from filesystem:
